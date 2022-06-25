@@ -1,29 +1,16 @@
-import git
 import pandas as pd
-import numpy as np
 import requests
 import json
-import os 
-
-print(os.getcwd())
-
-import subprocess
 import os
-
 
 def get_from_owid():
   print("Our WORLD IN DATA")
 
-  
+  url = "https://covid.ourworldindata.org/data/owid-covid-data.csv"
+  #change separator and save to structure
+  df = pd.read_csv(url, sep=',')
+  df.to_csv('data/raw/owid_full_data.csv', ';')
 
-def get_from_john_hopkins():
-  print("JOHN HOPKINS DATA")
-
-  r = git.Git('data/raw/john_hopkins')
-  print(r.pull('https://github.com/CSSEGISandData/COVID-19.git', allow_unrelated_histories=True))
-
-  #1. Clone neu
-  #2. Pull
 
 def get_from_rki():
   print("ROBERT KOCH INSTITUT DATA")
@@ -36,14 +23,14 @@ def get_from_rki():
 
   pd_full_list=pd.DataFrame(full_list)
   pd_full_list.to_csv('data/raw/rki_GER_state_data.csv',sep=';')
-  print(' Number of regions rows: '+str(pd_full_list.shape[0]))
+  #print(' Number of regions rows: '+str(pd_full_list.shape[0]))
 
   pd_full_list.info()
   pd_full_list
 
 if __name__ == '__main__':
+  #Get Current Dir
+  print(os.getcwd())
   get_from_owid()
-  #get_from_john_hopkins()
-  get_from_rki()
 
 
