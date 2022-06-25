@@ -3,7 +3,15 @@ COVID-19_Monitoring
 
 Project for Enterprise Data Science Course at TU Kaiserslautern
 
-Project Organization
+Features
+------------
+- 3 Countries 
+- Total Covid Cases over Time
+- Total Vaccinations over Time
+
+
+
+Project Organization (via Cookiecutter)
 ------------
 
     ├── LICENSE
