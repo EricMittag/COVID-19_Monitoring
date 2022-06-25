@@ -6,7 +6,7 @@ from dotenv import find_dotenv, load_dotenv
 
 import pandas as pd
 
-#Goal
+##Goals
 #Only selected Countries and add needed columns
 
 
@@ -14,7 +14,7 @@ import pandas as pd
 INPUT_PATH = 'data/raw/'
 OUTPUT_PATH = 'data/processed/'
 
-list_of_countries = ['Germany', 'United States', 'Taiwan']
+list_of_countries = ['Germany', 'United States', 'Israel']
 binary_selector = [0] * 3
 
 #@click.command()
@@ -45,7 +45,7 @@ def main(input_filepath, output_filepath):
     df_allSelectedCountries['people_vaccinated_norm'] = df_allSelectedCountries['people_vaccinated']/df_allSelectedCountries['population']
 
     ##Saving df to structure
-    df_allSelectedCountries.to_csv(output_filepath + 'owid_processed_data.csv')
+    df_allSelectedCountries.to_csv(output_filepath + 'owid_processed_data.csv', sep=";")
 
     logger.info('processing data completed!')
 
