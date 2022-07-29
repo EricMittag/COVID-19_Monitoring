@@ -5,9 +5,15 @@ Project for Enterprise Data Science Course at TU Kaiserslautern
 
 Features
 ------------
+Plots of 
 - 3 Countries 
 - Total Covid Cases over Time
 - Total Vaccinations over Time
+
+Interactive Browser Dashboard 
+- 5 Countries
+- Total Covid Cases
+- Doubling Rate
 
 
 
