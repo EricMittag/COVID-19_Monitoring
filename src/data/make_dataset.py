@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 import pandas as pd
+import numpy as np
 
 ##Goals
 #Only selected Countries and add needed columns
@@ -14,16 +14,13 @@ import pandas as pd
 INPUT_PATH = 'data/raw/'
 OUTPUT_PATH = 'data/processed/'
 
-list_of_countries = ['Germany', 'United States', 'Israel']
-binary_selector = [0] * 3
-
-#@click.command()
-#@click.argument('input_filepath', type=click.Path(exists=True))
-#@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+def selectedCountriesCasesVax(input_filepath, output_filepath):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
+    list_of_countries = ['Germany', 'United States', 'Israel']
+    binary_selector = [0] * 3
+
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
@@ -45,10 +42,36 @@ def main(input_filepath, output_filepath):
     df_allSelectedCountries['people_vaccinated_norm'] = df_allSelectedCountries['people_vaccinated']/df_allSelectedCountries['population']
 
     ##Saving df to structure
-    df_allSelectedCountries.to_csv(output_filepath + 'owid_processed_data.csv', sep=";")
+    df_allSelectedCountries.to_csv(output_filepath + 'GER_US_ISR_cases_vax.csv', sep=";")
 
     logger.info('processing data completed!')
 
+def getRelevantData(input_filepath, output_filepath):
+    """ Runs data processing scripts to turn raw data from (../raw) into
+        cleaned data ready to be analyzed (saved in ../processed).
+    """
+    logger = logging.getLogger(__name__)
+    logger.info('making final data set from raw data')
+
+    df = pd.read_csv(input_filepath+'owid_full_data.csv', sep=";", index_col=0)
+
+    #Get Important Cols out of full data set and sort by date
+    df_reduced_raw = df[['date', 'location', 'total_cases']].sort_values('date',ascending=True).reset_index(drop=True).copy()
+
+    #rename columns
+    df_reduced = df_reduced_raw.rename(columns= {
+    'location':'country',
+    'total_cases':'confirmed'
+    })
+
+    #Cleaning Data: Not enough data
+    df_reduced = df_reduced[df_reduced['country']!='Western Sahara']
+
+    #Fill missing values
+    df_reduced['confirmed']=df_reduced['confirmed'].fillna(0)
+
+    df_reduced.to_csv(output_filepath + 'Reduced_OWID_Set.csv', sep=";", index=False)
+    logger.info('processing data completed!')
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -61,4 +84,5 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    main(INPUT_PATH, OUTPUT_PATH)
+    #selectedCountriesCasesVax(INPUT_PATH, OUTPUT_PATH)
+    getRelevantData(INPUT_PATH, OUTPUT_PATH)
